@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 @Component
 public class SampleGlobalFilter implements GlobalFilter, Ordered {
 
@@ -32,8 +34,12 @@ public class SampleGlobalFilter implements GlobalFilter, Ordered {
             String token = mutatedExchange.getRequest().getHeaders().getFirst("token");
             logger.info("token:  " + token);
 
+            Optional.ofNullable(mutatedExchange.getRequest().getHeaders().getFirst("token")).ifPresent(value ->{
+                logger.info("token2:  " + value);
+                mutatedExchange.getResponse().getHeaders().add("token","tokenheader");
+            });
             mutatedExchange.getResponse().getCookies().add("color", ResponseCookie.from("color", "red").build());
-            mutatedExchange.getResponse().getHeaders().setContentType(MediaType.TEXT_PLAIN);
+           // mutatedExchange.getResponse().getHeaders().setContentType(MediaType.TEXT_PLAIN);
 
         }));
     }

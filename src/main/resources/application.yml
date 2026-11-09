@@ -6,11 +6,19 @@ spring:
         uri: lb://msvc-products
         predicates:
         - Path=/api/products/**
+        #- Header=token, \d+ : exp reg valido cualquier valor numerico
+        #- Method=GET, POST
+        #- Query=color, verde
+        #- Cookie=color, azul
         filters:
         - StripPrefix=2
+        - EjemploCookie= Mensaje persoanlizado para productos, user, nacho
       - id: msvc-items
         uri: lb://msvc-items
         predicates:
         - Path=/api/items/**
         filters:
         - StripPrefix=2
+        - AddRequestHeader=token-request, tokenizate
+        - AddResponseHeader=token-response, responsetokenizate
+        - AddRequestParameter=name, Nacho
